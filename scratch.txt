@@ -1,0 +1,17 @@
+{
+	"devices":[
+        {
+            "powertype":	"GROSS_PRODUCTION_SITE",
+            "net_kwh":	"16283.34",
+            "current_kw":	"0.0079",
+            "freq_hz":	"60",
+            "CURTIME":	"2022,05,29,01,44,44"
+        }, {
+            "powertype":	"GROSS_CONSUMPTION_LINESIDE",
+            "net_kwh":	"32978.3899",
+            "current_kw":	"1.8847",
+            "freq_hz":	"60",
+            "CURTIME":	"2022,05,29,01,44,45"
+        }
+    ]
+}
