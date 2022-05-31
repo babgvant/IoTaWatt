@@ -84,6 +84,7 @@ void handleRequest(){
   if(serverOn(authUser,  F("/query"), HTTP_GET, handleQuery)) return;
   if(serverOn(authUser,  F("/DSTtest"), HTTP_GET, handleDSTtest)) return;
   if(serverOn(authAdmin, F("/update"), HTTP_GET, handleUpdate)) return;
+  if(serverOn(authAdmin, F("/powersend"), HTTP_POST, handlePowerSend)) return;
 
 
   if(loadFromSdCard(uri)){
@@ -894,7 +895,6 @@ void sendMsgFile(File &dataFile, int32_t relPos){
     _client.write(dataFile);
 }
 
-
 void handleQuery(){
   trace(T_WEB,50);
   CSVquery* query = new CSVquery();
@@ -960,9 +960,7 @@ void handleUpdate(){
     server.send(400, txtPlain_P, F("Release file not validated."));
     return;
   }
-}
-  
-    
+}    
 
 void handleDSTtest(){
     uint32_t begin = server.arg(F("begin")).toInt();
@@ -985,6 +983,34 @@ void handleDSTtest(){
     }
     server.send(200, txtPlain_P, buf.readString(buf.available()).c_str());
 }
+ 
+void handlePowerSend(){  
+  trace(T_WEB,0);
+  uint32_t heapEntry = ESP.getFreeHeap();
+  String response = "";
+  String input = "";
+
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& root = jsonBuffer.createObject();
+  DynamicJsonBuffer Json;
+  JsonObject& request = Json.parseObject(server.arg("plain"));
+  if( ! request.success()){
+    server.send(400, txtPlain_P, F("Json parse failed."));
+    return;
+  }
+
+  request.printTo(input);
+  log("%s", input.c_str());
+
+  if (root.containsKey("devices")) {
+
+  }
+  
+  root.set(F("yo"), "success");
+  root.printTo(response);
+  server.send(200, appJson_P, response);
+} 
+ 
         // Seems to work better when sending chunk as a single write
         // including chunk header, body, and footer (\r\n).
         // This function accepts a char* buffer and length to send.
